@@ -99,9 +99,9 @@ The project evaluates each technique using multiple metrics:
 - **Agreement (κ)**: Cohen's Kappa - How well the model agrees with humans beyond chance
 - **Consistency (α)**: Krippendorff's Alpha - How reliably the model follows human scoring patterns
 - **Correlation (ICC)**: Intraclass Correlation - How closely model scores align with human scores
-- **Off-by-One Accuracy**: How often the model is within ±1 of the human score
+<!-- - **Off-by-One Accuracy**: How often the model is within ±1 of the human score
 - **Mean Absolute Error (MAE)**: Average absolute difference between human and model scores
-- **Root Mean Square Error (RMSE)**: Root mean square difference between human and model scores
+- **Root Mean Square Error (RMSE)**: Root mean square difference between human and model scores-->
 
 ### Output
 The program generates:
@@ -133,4 +133,16 @@ The project requires the following packages:
 - A minimum of 10 examples is required for statistically valid results
 - Ensure you have a valid OpenAI API key with sufficient credits
 - The default model used is gpt-3.5-turbo-0125, but you can configure other models in the code
+
+<!-- ## Citation
+If you use this code in your research, please cite:
+
+```
+@software{course_alignment_evaluation,
+  author = {Your Name},
+  title = {Course Learning Objective Alignment Evaluation},
+  url = {https://github.com/YOUR_USERNAME/course-alignment-evaluation},
+  year = {2025},
+}
+```-->
 
