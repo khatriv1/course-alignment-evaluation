@@ -22,7 +22,7 @@ Each technique is evaluated on how well it matches human expert ratings of cours
 ```
 course_alignment_evaluation/
 ├── data/
-│   └── humanscore.csv
+│   └── human-score.csv
 ├── prompting/
 │   ├── zero_shot.py
 │   ├── few_shot.py
@@ -52,7 +52,7 @@ course_alignment_evaluation/
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/YOUR_USERNAME/course-alignment-evaluation.git
+git clone https://github.com/khatriv1/course-alignment-evaluation.git
 cd course-alignment-evaluation
 ```
 
