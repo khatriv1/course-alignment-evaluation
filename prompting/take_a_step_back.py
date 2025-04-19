@@ -1,8 +1,8 @@
 import re
 import openai
 
-def create_cot_prompt(course_title, description, learning_objective):
-    """Create a Chain of Thought prompt."""
+def create_step_back_prompt(course_title, description, learning_objective):
+    """Create a Take a Step Back prompt."""
     return f"""Rate how well this course covers the learning objective:
 
 Course Title: {course_title}
@@ -16,31 +16,14 @@ SCORING RUBRIC:
 2 - Unrelated but Within Same Domain: Within the discipline but not relevant to course content.
 1 - Completely Unrelated: The task is outside the scope of the course and belongs to a different domain.
 
-Let's think about this step by step:
+Let me take a step back and think about this at a more abstract level:
 
-1. First, identify and list the key concepts and skills from the course description:
-   - What are the main topics covered?
-   - What specific skills are taught?
-   - What are the core learning outcomes?
+1. What is the general domain or field of knowledge this course belongs to?
+2. What broader learning categories does this course aim to develop (e.g., technical skills, theoretical knowledge, analytical abilities)?
+3. What general type of capability does the learning objective represent?
+4. At an abstract level, what transferable skills might connect the course to the objective?
 
-2. Next, analyze what the learning objective requires:
-   - What specific skills or knowledge does it need?
-   - What level of proficiency is implied?
-   - In what context would this objective be applied?
-
-3. Compare the course content and the objective:
-   - Are there direct overlaps in content?
-   - Are the required skills explicitly taught?
-   - Could the course skills transfer to this objective?
-
-4. Consider the level of alignment:
-   - Is this a core focus of the course?
-   - Is it indirectly supported by course content?
-   - Are they in the same domain?
-
-5. Based on this analysis, determine the appropriate score according to the rubric.
-
-First walk through each step of the analysis, then provide a single numerical rating (1-5) followed by your final justification."""
+Now, using this more abstract understanding, I'll analyze the specific alignment between the course and learning objective to provide a rating."""
 
 def extract_score(response):
     """Extract numerical score from model response."""
@@ -65,15 +48,15 @@ def extract_score(response):
         
     return None
 
-def get_cot_prediction(course_title, description, learning_objective, client):
-    """Get prediction using Chain of Thought prompting."""
-    prompt = create_cot_prompt(course_title, description, learning_objective)
+def get_step_back_prediction(course_title, description, learning_objective, client):
+    """Get prediction using Take a Step Back prompting."""
+    prompt = create_step_back_prompt(course_title, description, learning_objective)
     
     try:
         response = client.chat.completions.create(
             model="gpt-3.5-turbo-0125",
             messages=[
-                {"role": "system", "content": "You are an expert at evaluating how well course descriptions align with learning objectives. Use careful step-by-step reasoning to analyze the alignment and provide a single numerical rating (1-5) followed by justification."},
+                {"role": "system", "content": "You are an expert at evaluating how well course descriptions align with learning objectives. First take a step back to consider the question from a more abstract perspective, then provide a single numerical rating (1-5) followed by justification."},
                 {"role": "user", "content": prompt}
             ],
             temperature=0,

@@ -1,8 +1,8 @@
 import re
 import openai
 
-def create_cot_prompt(course_title, description, learning_objective):
-    """Create a Chain of Thought prompt."""
+def create_contrastive_cot_prompt(course_title, description, learning_objective):
+    """Create a contrastive chain of thought prompt."""
     return f"""Rate how well this course covers the learning objective:
 
 Course Title: {course_title}
@@ -16,31 +16,23 @@ SCORING RUBRIC:
 2 - Unrelated but Within Same Domain: Within the discipline but not relevant to course content.
 1 - Completely Unrelated: The task is outside the scope of the course and belongs to a different domain.
 
-Let's think about this step by step:
+Let me think about this step by step:
 
-1. First, identify and list the key concepts and skills from the course description:
-   - What are the main topics covered?
-   - What specific skills are taught?
-   - What are the core learning outcomes?
+First, here's an incorrect reasoning path to avoid:
+1. A quick comparison of keywords might suggest a certain rating.
+2. Assigning a rating solely based on overlapping terms.
+3. Missing nuances in how skills in the course might transfer to the objective.
+4. Overlooking implicit connections between course content and objective requirements.
+5. This incorrect approach would likely lead to a wrong rating.
 
-2. Next, analyze what the learning objective requires:
-   - What specific skills or knowledge does it need?
-   - What level of proficiency is implied?
-   - In what context would this objective be applied?
+Now, let's analyze this correctly:
+1. Let me identify key skills and knowledge areas taught in the course.
+2. Next, I'll identify what skills and knowledge the learning objective requires.
+3. I'll compare these carefully, looking for both explicit and implicit connections.
+4. I'll consider how directly the course prepares students for the learning objective.
+5. Based on this thorough analysis, I'll assign a rating according to the rubric.
 
-3. Compare the course content and the objective:
-   - Are there direct overlaps in content?
-   - Are the required skills explicitly taught?
-   - Could the course skills transfer to this objective?
-
-4. Consider the level of alignment:
-   - Is this a core focus of the course?
-   - Is it indirectly supported by course content?
-   - Are they in the same domain?
-
-5. Based on this analysis, determine the appropriate score according to the rubric.
-
-First walk through each step of the analysis, then provide a single numerical rating (1-5) followed by your final justification."""
+Now I'll analyze the course and learning objective using the correct reasoning path and provide a rating."""
 
 def extract_score(response):
     """Extract numerical score from model response."""
@@ -65,15 +57,15 @@ def extract_score(response):
         
     return None
 
-def get_cot_prediction(course_title, description, learning_objective, client):
-    """Get prediction using Chain of Thought prompting."""
-    prompt = create_cot_prompt(course_title, description, learning_objective)
+def get_contrastive_cot_prediction(course_title, description, learning_objective, client):
+    """Get prediction using contrastive chain of thought prompting."""
+    prompt = create_contrastive_cot_prompt(course_title, description, learning_objective)
     
     try:
         response = client.chat.completions.create(
             model="gpt-3.5-turbo-0125",
             messages=[
-                {"role": "system", "content": "You are an expert at evaluating how well course descriptions align with learning objectives. Use careful step-by-step reasoning to analyze the alignment and provide a single numerical rating (1-5) followed by justification."},
+                {"role": "system", "content": "You are an expert at evaluating how well course descriptions align with learning objectives. Use careful step-by-step reasoning, avoid common pitfalls, and provide a single numerical rating (1-5) followed by justification."},
                 {"role": "user", "content": prompt}
             ],
             temperature=0,

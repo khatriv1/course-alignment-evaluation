@@ -1,8 +1,8 @@
 import re
 import openai
 
-def create_cot_prompt(course_title, description, learning_objective):
-    """Create a Chain of Thought prompt."""
+def create_rar_prompt(course_title, description, learning_objective):
+    """Create a Rephrase and Respond prompt."""
     return f"""Rate how well this course covers the learning objective:
 
 Course Title: {course_title}
@@ -16,31 +16,11 @@ SCORING RUBRIC:
 2 - Unrelated but Within Same Domain: Within the discipline but not relevant to course content.
 1 - Completely Unrelated: The task is outside the scope of the course and belongs to a different domain.
 
-Let's think about this step by step:
+First, let me rephrase the question to ensure I understand it clearly:
 
-1. First, identify and list the key concepts and skills from the course description:
-   - What are the main topics covered?
-   - What specific skills are taught?
-   - What are the core learning outcomes?
+I need to evaluate how well the course "{course_title}" with description: "{description}" prepares students to achieve the learning objective: "{learning_objective}". I'll use a 5-point scale where 5 means the objective is a core part of the course, and 1 means it's completely unrelated.
 
-2. Next, analyze what the learning objective requires:
-   - What specific skills or knowledge does it need?
-   - What level of proficiency is implied?
-   - In what context would this objective be applied?
-
-3. Compare the course content and the objective:
-   - Are there direct overlaps in content?
-   - Are the required skills explicitly taught?
-   - Could the course skills transfer to this objective?
-
-4. Consider the level of alignment:
-   - Is this a core focus of the course?
-   - Is it indirectly supported by course content?
-   - Are they in the same domain?
-
-5. Based on this analysis, determine the appropriate score according to the rubric.
-
-First walk through each step of the analysis, then provide a single numerical rating (1-5) followed by your final justification."""
+Now I'll analyze the alignment and provide a rating."""
 
 def extract_score(response):
     """Extract numerical score from model response."""
@@ -65,19 +45,19 @@ def extract_score(response):
         
     return None
 
-def get_cot_prediction(course_title, description, learning_objective, client):
-    """Get prediction using Chain of Thought prompting."""
-    prompt = create_cot_prompt(course_title, description, learning_objective)
+def get_rar_prediction(course_title, description, learning_objective, client):
+    """Get prediction using Rephrase and Respond (RaR) prompting."""
+    prompt = create_rar_prompt(course_title, description, learning_objective)
     
     try:
         response = client.chat.completions.create(
             model="gpt-3.5-turbo-0125",
             messages=[
-                {"role": "system", "content": "You are an expert at evaluating how well course descriptions align with learning objectives. Use careful step-by-step reasoning to analyze the alignment and provide a single numerical rating (1-5) followed by justification."},
+                {"role": "system", "content": "You are an expert at evaluating how well course descriptions align with learning objectives. First rephrase the question to ensure a clear understanding, then provide a single numerical rating (1-5) followed by justification."},
                 {"role": "user", "content": prompt}
             ],
             temperature=0,
-            max_tokens=500
+            max_tokens=400
         )
         
         return extract_score(response.choices[0].message.content)

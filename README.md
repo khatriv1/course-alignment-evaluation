@@ -1,14 +1,24 @@
 # Course Learning Objective Alignment Evaluation
 
-This project evaluates the alignment between course descriptions and learning objectives using three different LLM prompting techniques: Zero-shot, Few-shot, and Chain of Thought.
+This project evaluates the alignment between course descriptions and learning objectives using multiple advanced LLM prompting techniques. It systematically compares the effectiveness of different prompting approaches to see which ones best match human expert judgments.
 
 ## Project Overview
-The project compares three prompting techniques:
-- Zero-shot: Direct prompting with rubric
-- Few-shot: Prompting with examples
-- Chain of Thought: Step-by-step reasoning
+
+The project compares eight different prompting techniques:
+
+- **Zero-shot**: Direct prompting with a rubric but no examples
+- **Few-shot**: Prompting with demonstrative examples
+- **Chain of Thought (CoT)**: Step-by-step reasoning before answering
+- **Self-Consistency**: Sampling multiple reasoning paths and selecting the most consistent answer
+- **Auto Chain of Thought (Auto-CoT)**: Automatically generated reasoning chains
+- **Contrastive Chain of Thought (CCoT)**: Contrasting correct and incorrect reasoning paths
+- **Rephrase and Respond (RaR)**: Rephrasing the question before answering
+- **Take a Step Back**: Approaching the problem from an abstract level before detailed analysis
+
+Each technique is evaluated on how well it matches human expert ratings of course-objective alignment.
 
 ## Directory Structure
+
 ```
 course_alignment_evaluation/
 ├── data/
@@ -16,56 +26,111 @@ course_alignment_evaluation/
 ├── prompting/
 │   ├── zero_shot.py
 │   ├── few_shot.py
-│   └── cot.py
+│   ├── cot.py
+│   ├── self_consistency.py
+│   ├── auto_cot.py
+│   ├── contrastive_cot.py
+│   ├── rephrase_and_respond.py
+│   └── take_a_step_back.py
 ├── utils/
 │   └── metrics.py
 ├── evaluation/
 │   ├── evaluate_zero_shot.py
 │   ├── evaluate_few_shot.py
-│   └── evaluate_cot.py
+│   ├── evaluate_cot.py
+│   ├── evaluate_self_consistency.py
+│   ├── evaluate_auto_cot.py
+│   ├── evaluate_contrastive_cot.py
+│   ├── evaluate_rar.py
+│   └── evaluate_step_back.py
 ├── config.py
-└── main.py
+├── main.py
+└── requirements.txt
 ```
 
 ## Setup Instructions
+
 1. Clone the repository:
 ```bash
 git clone https://github.com/YOUR_USERNAME/course-alignment-evaluation.git
 cd course-alignment-evaluation
 ```
 
-2. Install required packages:
+2. Create and activate a virtual environment (recommended):
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+3. Install required packages:
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Create `config.py` with your OpenAI API key (see config_example.py)
-
-4. Place your dataset in the data directory
-
-## Usage
-Run individual evaluations:
-```bash
-python evaluation/evaluate_zero_shot.py
-python evaluation/evaluate_few_shot.py
-python evaluation/evaluate_cot.py
+4. Set up your OpenAI API key in config.py:
+```python
+OPENAI_API_KEY = "your-api-key-here"
+DATA_PATH = "data/human-score.csv"
 ```
 
-Or run all evaluations:
+5. Ensure your dataset is in the data directory, following the expected format.
+
+## Usage
+
+Run the main evaluation script to compare techniques:
 ```bash
 python main.py
 ```
 
-## Output
+When running, you'll be prompted to:
+1. Enter the number of examples to test with (minimum 10 required for statistical validity)
+2. Select which techniques to evaluate (by entering their corresponding numbers)
+
+For individual technique evaluation, run:
+```bash
+python evaluation/evaluate_technique_name.py
+```
+
+## Technical Details
+
+### Metrics
+The project evaluates each technique using multiple metrics:
+- **Accuracy**: How often the model exactly matches human scores
+- **Agreement (κ)**: Cohen's Kappa - How well the model agrees with humans beyond chance
+- **Consistency (α)**: Krippendorff's Alpha - How reliably the model follows human scoring patterns
+- **Correlation (ICC)**: Intraclass Correlation - How closely model scores align with human scores
+- **Off-by-One Accuracy**: How often the model is within ±1 of the human score
+- **Mean Absolute Error (MAE)**: Average absolute difference between human and model scores
+- **Root Mean Square Error (RMSE)**: Root mean square difference between human and model scores
+
+### Output
 The program generates:
 - Individual technique evaluations
-- Comparison visualizations
+- Comparison visualizations across all evaluated techniques
 - Detailed results in CSV format
-- Summary report with metrics (κ, α, ICC)
+- Summary report with all metrics
 
-## Results Format
-Results are saved in a timestamped directory containing:
-- technique_comparison.csv
-- technique_comparison.png
-- all_detailed_results.csv
-- summary_report.txt
+## Example Results
+Results will be stored in the `results/evaluation_report` directory, including:
+- technique_comparison.csv (Overall metrics)
+- technique_comparison.png (Visualization)
+- all_detailed_results.csv (Detailed predictions)
+- summary_report.txt (Complete analysis)
+- Individual technique results in technique-specific subdirectories
+
+## Requirements
+The project requires the following packages:
+- numpy
+- pandas
+- matplotlib
+- seaborn
+- scikit-learn
+- scipy
+- krippendorff
+- openai
+
+## Important Notes
+- A minimum of 10 examples is required for statistically valid results
+- Ensure you have a valid OpenAI API key with sufficient credits
+- The default model used is gpt-3.5-turbo-0125, but you can configure other models in the code
+
