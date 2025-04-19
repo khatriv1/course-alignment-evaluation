@@ -5,7 +5,7 @@
 OPENAI_API_KEY = "your-api-key-here"  # Replace with your API key
 
 # Data Configuration
-DATA_PATH = "data/humanscore.csv"  # Path to your dataset
+DATA_PATH = "data/human-score.csv"  # Path to your dataset
 
 # Output Configuration
 OUTPUT_DIR = "results"  # Directory for saving results
