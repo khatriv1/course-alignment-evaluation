@@ -9,3 +9,9 @@ DATA_PATH = "data/humanscore.csv"  # Path to your dataset
 
 # Output Configuration
 OUTPUT_DIR = "results"  # Directory for saving results
+
+# Model Configuration
+MODEL_ID = "gpt-3.5-turbo-0125"  # Base model ID
+
+# Rate Limiting
+SLEEP_TIME = 1  # Seconds to wait between API calls
