@@ -78,11 +78,20 @@ def create_comparison_visualization(comparison_df, output_dir):
 
 def run_all_evaluations(data_path, api_key, output_dir="results", limit=None, techniques=None):
     """Run all prompting techniques and create comparison."""
-    # Create output directory
-    output_dir = os.path.join(output_dir, f"evaluation_report")
-    os.makedirs(output_dir, exist_ok=True)
+    # Create timestamped output directory
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    base_dir = f"evaluation_report_{timestamp}"
+    output_path = os.path.join(output_dir, base_dir)
     
-    print(f"\nResults will be saved in: {output_dir}")
+    # Check if directory already exists, and create alternative if needed
+    counter = 1
+    while os.path.exists(output_path):
+        output_path = os.path.join(output_dir, f"{base_dir}_{counter}")
+        counter += 1
+    
+    os.makedirs(output_path, exist_ok=True)
+    
+    print(f"\nResults will be saved in: {output_path}")
     
     # Store results from each technique
     all_results = {}
@@ -106,7 +115,7 @@ def run_all_evaluations(data_path, api_key, output_dir="results", limit=None, te
         print(f"\nRunning {technique_name} evaluation...")
         
         # Create technique-specific directory
-        technique_dir = os.path.join(output_dir, technique_name.lower().replace(' ', '_'))
+        technique_dir = os.path.join(output_path, technique_name.lower().replace(' ', '_'))
         os.makedirs(technique_dir, exist_ok=True)
         
         # Run evaluation
@@ -129,18 +138,18 @@ def run_all_evaluations(data_path, api_key, output_dir="results", limit=None, te
     })
     
     # Save comparison results
-    comparison_df.to_csv(f"{output_dir}/technique_comparison.csv", index=False)
+    comparison_df.to_csv(f"{output_path}/technique_comparison.csv", index=False)
     
     # Create comparison visualization
-    create_comparison_visualization(comparison_df, output_dir)
+    create_comparison_visualization(comparison_df, output_path)
     
     # Combine and save detailed results
     all_detailed_results = pd.concat(detailed_results, ignore_index=True)
-    all_detailed_results.to_csv(f"{output_dir}/all_detailed_results.csv",
+    all_detailed_results.to_csv(f"{output_path}/all_detailed_results.csv",
                               index=False)
     
     # Generate summary report
-    with open(f"{output_dir}/summary_report.txt", 'w') as f:
+    with open(f"{output_path}/summary_report.txt", 'w') as f:
         f.write("=== Prompting Techniques Comparison Summary ===\n\n")
         
         # Overall metrics
@@ -182,7 +191,7 @@ def run_all_evaluations(data_path, api_key, output_dir="results", limit=None, te
         f.write("Take a Step Back: Approaches the problem from a more abstract level before detailed analysis.\n")
     
     print("\n=== Evaluation Complete ===")
-    print(f"All results saved in: {output_dir}")
+    print(f"All results saved in: {output_path}")
     print("\nGenerated files:")
     print("- technique_comparison.csv (Overall metrics)")
     print("- technique_comparison.png (Visualization)")
