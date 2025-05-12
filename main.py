@@ -12,6 +12,7 @@ from evaluation.evaluate_contrastive_cot import evaluate_contrastive_cot
 from evaluation.evaluate_rar import evaluate_rar
 from evaluation.evaluate_step_back import evaluate_step_back
 from evaluation.evaluate_auto_cot import evaluate_auto_cot
+from evaluation.evaluate_active_prompt import evaluate_active_prompt
 import config
 
 def create_comparison_visualization(comparison_df, output_dir):
@@ -107,7 +108,8 @@ def run_all_evaluations(data_path, api_key, output_dir="results", limit=None, te
             'Auto Chain of Thought': evaluate_auto_cot,
             'Contrastive Chain of Thought': evaluate_contrastive_cot,
             'Rephrase and Respond': evaluate_rar,
-            'Take a Step Back': evaluate_step_back
+            'Take a Step Back': evaluate_step_back,
+            'Active Prompting': evaluate_active_prompt
         }
     
     # Process each technique
@@ -189,6 +191,7 @@ def run_all_evaluations(data_path, api_key, output_dir="results", limit=None, te
         f.write("Contrastive Chain of Thought (CCoT): Provides both correct and incorrect reasoning paths to enhance accuracy.\n")
         f.write("Rephrase and Respond (RaR): First rephrases the problem to ensure clear understanding, then answers.\n")
         f.write("Take a Step Back: Approaches the problem from a more abstract level before detailed analysis.\n")
+        f.write("Active Prompting: Selects the most informative examples based on uncertainty metrics to enhance model performance.\n")
     
     print("\n=== Evaluation Complete ===")
     print(f"All results saved in: {output_path}")
@@ -234,26 +237,27 @@ if __name__ == "__main__":
         "6. Contrastive Chain of Thought",
         "7. Rephrase and Respond",
         "8. Take a Step Back",
-        "9. All techniques"
+        "9. Active Prompting",
+        "10. All techniques"
     ]
     for technique in techniques_list:
         print(technique)
     
     # Improved error handling for technique selection
-    technique_input = input("\nEnter the numbers of techniques to evaluate (comma-separated) or 9 for all: ")
+    technique_input = input("\nEnter the numbers of techniques to evaluate (comma-separated) or 10 for all: ")
     try:
         # Handle empty input gracefully
         if not technique_input.strip():
-            selected_indices = [9]  # Default to all techniques
+            selected_indices = [10]  # Default to all techniques
         else:
             selected_indices = [int(idx.strip()) for idx in technique_input.split(",") if idx.strip()]
         
         # Make sure we have at least one valid technique
         if not selected_indices:
-            selected_indices = [9]  # Default to all techniques
+            selected_indices = [10]  # Default to all techniques
     except ValueError:
         print("Invalid input. Defaulting to evaluating all techniques.")
-        selected_indices = [9]  # Default to all techniques
+        selected_indices = [10]  # Default to all techniques
     
     # Map evaluation functions (defining them outside the conditional blocks)
     evaluation_map = {
@@ -264,13 +268,14 @@ if __name__ == "__main__":
         "Auto Chain of Thought": evaluate_auto_cot,
         "Contrastive Chain of Thought": evaluate_contrastive_cot,
         "Rephrase and Respond": evaluate_rar,
-        "Take a Step Back": evaluate_step_back
+        "Take a Step Back": evaluate_step_back,
+        "Active Prompting": evaluate_active_prompt
     }
     
     # Run evaluations with improved error handling
     try:
-        # If 9 is selected or list is empty, run all techniques
-        if 9 in selected_indices:
+        # If 10 is selected or list is empty, run all techniques
+        if 10 in selected_indices:
             comparison_df, detailed_results = run_all_evaluations(
                 data_path=config.DATA_PATH,
                 api_key=config.OPENAI_API_KEY,
@@ -287,7 +292,8 @@ if __name__ == "__main__":
                 5: "Auto Chain of Thought",
                 6: "Contrastive Chain of Thought",
                 7: "Rephrase and Respond",
-                8: "Take a Step Back"
+                8: "Take a Step Back",
+                9: "Active Prompting"
             }
             
             # Filter out any invalid indices
