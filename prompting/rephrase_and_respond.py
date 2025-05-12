@@ -2,7 +2,7 @@ import re
 import openai
 
 def create_rar_prompt(course_title, description, learning_objective):
-    """Create a Rephrase and Respond prompt."""
+    """Create a Rephrase and Respond prompt that lets the AI do the rephrasing."""
     return f"""Rate how well this course covers the learning objective:
 
 Course Title: {course_title}
@@ -16,11 +16,8 @@ SCORING RUBRIC:
 2 - Unrelated but Within Same Domain: Within the discipline but not relevant to course content.
 1 - Completely Unrelated: The task is outside the scope of the course and belongs to a different domain.
 
-First, let me rephrase the question to ensure I understand it clearly:
-
-I need to evaluate how well the course "{course_title}" with description: "{description}" prepares students to achieve the learning objective: "{learning_objective}". I'll use a 5-point scale where 5 means the objective is a core part of the course, and 1 means it's completely unrelated.
-
-Now I'll analyze the alignment and provide a rating."""
+First, please rephrase this question in your own words to ensure you understand it correctly.
+Then, analyze the alignment between the course and learning objective to provide your rating."""
 
 def extract_score(response):
     """Extract numerical score from model response."""
@@ -46,14 +43,14 @@ def extract_score(response):
     return None
 
 def get_rar_prediction(course_title, description, learning_objective, client):
-    """Get prediction using Rephrase and Respond (RaR) prompting."""
+    """Get prediction using Rephrase and Respond (RaR) prompting where the AI does the rephrasing."""
     prompt = create_rar_prompt(course_title, description, learning_objective)
     
     try:
         response = client.chat.completions.create(
             model="gpt-3.5-turbo-0125",
             messages=[
-                {"role": "system", "content": "You are an expert at evaluating how well course descriptions align with learning objectives. First rephrase the question to ensure a clear understanding, then provide a single numerical rating (1-5) followed by justification."},
+                {"role": "system", "content": "You are an expert at evaluating how well course descriptions align with learning objectives. First rephrase the question in your own words to ensure you understand it correctly, then provide a single numerical rating (1-5) followed by justification."},
                 {"role": "user", "content": prompt}
             ],
             temperature=0,
