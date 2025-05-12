@@ -4,7 +4,7 @@ This project evaluates the alignment between course descriptions and learning ob
 
 ## Project Overview
 
-The project compares eight different prompting techniques:
+The project compares nine different prompting techniques:
 
 - **Zero-shot**: Direct prompting with a rubric but no examples
 - **Few-shot**: Prompting with demonstrative examples
@@ -14,6 +14,7 @@ The project compares eight different prompting techniques:
 - **Contrastive Chain of Thought (CCoT)**: Contrasting correct and incorrect reasoning paths
 - **Rephrase and Respond (RaR)**: Rephrasing the question before answering
 - **Take a Step Back**: Approaching the problem from an abstract level before detailed analysis
+- **Active Prompting**: Selects the most informative examples based on uncertainty metrics
 
 Each technique is evaluated on how well it matches human expert ratings of course-objective alignment.
 
@@ -31,7 +32,8 @@ course_alignment_evaluation/
 │   ├── auto_cot.py
 │   ├── contrastive_cot.py
 │   ├── rephrase_and_respond.py
-│   └── take_a_step_back.py
+│   ├── take_a_step_back.py
+│   └── active_prompt.py
 ├── utils/
 │   └── metrics.py
 ├── evaluation/
@@ -42,7 +44,8 @@ course_alignment_evaluation/
 │   ├── evaluate_auto_cot.py
 │   ├── evaluate_contrastive_cot.py
 │   ├── evaluate_rar.py
-│   └── evaluate_step_back.py
+│   ├── evaluate_step_back.py
+│   └── evaluate_active_prompt.py
 ├── config.py
 ├── main.py
 └── requirements.txt
@@ -134,6 +137,11 @@ The project requires the following packages:
 - Ensure you have a valid OpenAI API key with sufficient credits
 - The default model used is gpt-3.5-turbo-0125, but you can configure other models in the code
 
+<!-- ## References
+- Wei, J., Wang, X., Schuurmans, D., Bosma, M., Xia, F., Chi, E., Le, Q. V., & Zhou, D. (2022). Chain-of-thought prompting elicits reasoning in large language models. Advances in Neural Information Processing Systems.
+- Diao, S., Wang, P., Lin, Y., & Zhang, T. (2023). Active prompting with chain-of-thought for large language models. arXiv preprint arXiv:2302.12246.
+- Deng, Y., Zhang, W., Chen, Z., & Gu, Q. (2023). Rephrase and respond: Let large language models ask better questions for themselves. arXiv preprint arXiv:2311.04205.```-->
+
 <!-- ## Citation
 If you use this code in your research, please cite:
 
@@ -145,4 +153,3 @@ If you use this code in your research, please cite:
   year = {2025},
 }
 ```-->
-
