@@ -87,6 +87,7 @@ pip install -r requirements.txt
 ```bash
 cp config_example.py config.py
 # Edit config.py and replace "your-api-key-here" with your actual OpenAI API key
+```
 
 5. Ensure the SIGHT dataset is in the data directory.
 
