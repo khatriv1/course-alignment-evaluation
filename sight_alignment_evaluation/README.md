@@ -67,7 +67,8 @@ sight_alignment_evaluation/
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/sight-alignment-evaluation.git
+git clone https://github.com/khatriv1/course-alignment-evaluation.git
+cd course-alignment-evaluation
 cd sight_alignment_evaluation
 ```
 
