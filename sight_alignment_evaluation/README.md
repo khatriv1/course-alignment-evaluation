@@ -168,7 +168,6 @@ SIGHT: A Large Annotated Dataset on Student Insights Gathered from Higher Educat
     address={Toronto, Canada},
     url={https://github.com/rosewang2008/sight}
 }
-
+```
 Additional Note: The SIGHT dataset is intended for research purposes only to promote better understanding of effective pedagogy and student feedback. It follows MIT's Creative Commons License and should not be used for commercial purposes.
 
-```
