@@ -46,10 +46,29 @@ course_alignment_evaluation/
 │   ├── evaluate_rar.py
 │   ├── evaluate_step_back.py
 │   └── evaluate_active_prompt.py
+├── sight_alignment_evaluation/    # SIGHT Comment Classification Project
+│   ├── README.md                 # Detailed documentation for SIGHT evaluation
+│   ├── data/
+│   │   └── sample_dataset.csv    # SIGHT YouTube comments dataset
+│   ├── prompting/                # Same 9 prompting techniques adapted for SIGHT
+│   ├── utils/
+│   │   ├── data_loader.py        # SIGHT-specific data processing
+│   │   ├── sight_rubric.py       # 9 category definitions
+│   │   └── metrics.py            # Evaluation metrics
+│   ├── evaluation/               # Evaluation scripts for each technique
+│   ├── config.py
+│   └── main.py
 ├── config.py
 ├── main.py
-└── requirements.txt
+├── requirements.txt
+└── README.md                     # This file
 ```
+
+## Additional Evaluation: SIGHT Comment Classification
+
+This repository also includes the **SIGHT (Student Insights Gathered from Higher Education Transcripts)** evaluation framework in the `sight_alignment_evaluation/` directory. This evaluates the same 9 prompting techniques on a different task: classifying YouTube comments from educational videos into 9 categories (general, confusion, pedagogy, setup, gratitude, personal_experience, clarification, non_english, na).
+
+For detailed information about the SIGHT evaluation, see the [SIGHT README](./sight_alignment_evaluation/README.md).
 
 ## Setup Instructions
 
@@ -80,12 +99,20 @@ DATA_PATH = "data/human-score.csv"
 
 ## Usage
 
+### Course Alignment Evaluation
 Run the main evaluation script to compare techniques:
 ```bash
 python main.py
 ```
 
-When running, you'll be prompted to:
+### SIGHT Comment Classification
+For SIGHT evaluation:
+```bash
+cd sight_alignment_evaluation
+python main.py
+```
+
+When running either evaluation, you'll be prompted to:
 1. Enter the number of examples to test with (minimum 10 required for statistical validity)
 2. Select which techniques to evaluate (by entering their corresponding numbers)
 
