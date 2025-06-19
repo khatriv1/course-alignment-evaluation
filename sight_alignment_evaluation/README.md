@@ -156,4 +156,19 @@ Results are saved in timestamped directories containing:
 <!-- If using the SIGHT dataset, please cite:```-->
 ```
 SIGHT: A Large Annotated Dataset on Student Insights Gathered from Higher Education Transcripts
+
+@inproceedings{wang2023sight,
+    title={SIGHT: A Large Annotated Dataset on Student Insights Gathered from Higher Education Transcripts},
+    author={Wang, Rose E. and Wirawarn, Pawan and Goodman, Noah and Demszky, Dorottya},
+    booktitle={Proceedings of the 18th Workshop on Innovative Use of NLP for Building Educational Applications (BEA 2023)},
+    pages={315--351},
+    year={2023},
+    month={July},
+    publisher={Association for Computational Linguistics},
+    address={Toronto, Canada},
+    url={https://github.com/rosewang2008/sight}
+}
+
+Additional Note: The SIGHT dataset is intended for research purposes only to promote better understanding of effective pedagogy and student feedback. It follows MIT's Creative Commons License and should not be used for commercial purposes.
+
 ```
